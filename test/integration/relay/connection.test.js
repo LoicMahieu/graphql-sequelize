@@ -334,6 +334,37 @@ describe('relay', function () {
         include: [this.User.Tasks]
       });
 
+      this.userB = await this.User.create({
+        [this.User.Tasks.as]: [
+          {
+            id: ++this.taskId,
+            name: 'ZAA',
+            createdAt: new Date(now - 45000),
+            otherDate: new Date(now - 45000),
+            projectId: this.projectA.get('id'),
+            completed: true
+          },
+          {
+            id: ++this.taskId,
+            name: 'ZAB',
+            createdAt: new Date(now - 45000),
+            otherDate: new Date(now - 45000),
+            projectId: this.projectA.get('id'),
+            completed: true
+          },
+          {
+            id: ++this.taskId,
+            name: 'ZAC',
+            createdAt: new Date(now - 45000),
+            otherDate: new Date(now - 45000),
+            projectId: this.projectA.get('id'),
+            completed: true
+          }
+        ]
+      }, {
+        include: [this.User.Tasks]
+      });
+
       await Promise.join(
         this.projectA.update({
           ownerId: this.userA.get('id')
@@ -858,7 +889,10 @@ describe('relay', function () {
           'ABA',
           'ABC',
           'ABC',
-          'BAA'
+          'BAA',
+          'ZAA',
+          'ZAB',
+          'ZAC'
         ],
         [
           'BBB',
@@ -955,7 +989,7 @@ describe('relay', function () {
 
       if (result.errors) throw new Error(result.errors[0].stack);
 
-      expect(result.data.user.projects.edges[0].node.tasks.totalCount).to.equal(5);
+      expect(result.data.user.projects.edges[0].node.tasks.totalCount).to.equal(8);
       expect(result.data.user.projects.edges[1].node.tasks.totalCount).to.equal(4);
       expect(this.projectTaskConnectionFieldSpy.firstCall.args[0].source.get('tasks')).to.be.undefined;
     });

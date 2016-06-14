@@ -268,7 +268,7 @@ export function sequelizeConnection({name, nodeType, target, orderBy: orderByEnu
 
       if ((args.first || args.last) && (fullCount === null || fullCount === undefined)) {
         // In case of `OVER()` is not available, we need to get the full count from a second query.
-        fullCount = await model.count({
+        fullCount = await target.count(source, {
           where: argsToWhere(args)
         });
       }
